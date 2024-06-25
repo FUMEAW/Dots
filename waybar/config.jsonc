@@ -1,0 +1,194 @@
+{
+    "position": "top",
+    "layer": "top",
+    "height": 16,
+    "margin-top": 0,
+    "margin-bottom": 0,
+    "margin-left": 0,
+    "margin-right": 0,
+    "modules-left": ["custom/launcher", "sway/workspaces","temperature","battery","sway/scratchpad"],
+    "modules-center": ["cpu","custom/playerlabel","memory"],
+    "modules-right": ["custom/randwall", "network", "pulseaudio", "clock"],
+    // Modules configuration
+	"clock": {
+		"format": " {:%H:%M}",
+		"tooltip": "true",
+        	"tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        	"format-alt": " {:%d/%m}"
+	},
+	
+
+	"hyprland/workspaces": {
+        "active-only": false,
+        "all-outputs": true,
+        "disable-scroll": false,
+        "on-scroll-up": "hyprctl dispatch workspace -1",
+        "on-scroll-down": "hyprctl dispatch workspace +1",
+		"format": "{icon}",
+		"on-click": "activate",
+		"format-icons": {
+//			"1": "一",
+//			"2": "二",
+//			"3": "三",
+//			"4": "四",
+//			"5": "五",
+			"urgent": "",
+			"active": "",
+			"default": "󰧞",
+    "sort-by-number": true
+    }
+    },
+    "sway/scratchpad": {
+      "format": "{icon} {count}",
+      "show-empty": false,
+      "format-icons": ["", ""],
+      "tooltip": true,
+      "tooltip-format": "{app}: {title}"
+    },
+    
+    "custom/playerlabel": {
+      "format": "{icon}{}",
+      "return-type": "json",
+      "max-length": 35,
+      "exec": "playerctl -a metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+      "on-click": "playerctl play-pause",
+      "on-scroll-down": "playerctl previous",
+      "on-scroll-up": "playerctl next",
+      "format-icons": {
+        "Paused": "<span foreground='#928374'> 󰏥  </span>"
+      },
+    },
+  "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 40,
+        "format-critical": "{icon} {temperatureC}°C",
+        "format": "{icon} {temperatureC}°C",
+        "format-icons": [
+            "",
+            "",
+            ""
+        ],
+        "tooltip": true,
+        "on-click": "kitty --start-as=fullscreen --title all_is_kitty sh -c 'btop'",
+        "interval": 2
+    },
+	"battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format":"{icon}  {capacity}%",
+        "format-charging": "{capacity}% ",
+        "format-plugged": "{capacity}% ",
+        "format-alt": "{icon} {time}",
+        // "format-good": "", // An empty format will hide the module
+        // "format-full": "",
+        "format-icons": ["", "", "", "", ""]
+	},
+
+  "memory": {
+    "format": "󰻠 {}%",
+    "format-alt": "󰻠 {used}/{total} GiB",
+    "interval": 5
+  },
+
+  "cpu": {
+    "format": "󰍛 {usage}%",
+    "format-alt": "󰍛 {avg_frequency} GHz",
+    "interval": 5
+  },
+
+  "disk": {
+    "format": "󰋊 {}%",
+    "format-alt": "󰋊 {used}/{total} GiB",
+    "interval": 5,
+    "path": "/mnt/Datos"
+  },
+	
+	"network": {
+        	"format-wifi": "󰤨  {essid}",
+        	"format-ethernet": " {ifname}: Aesthetic",
+        	"format-linked": " {ifname} (No IP)",
+        	"format-disconnected": "󰤭 ",
+        	"format-alt": " {ifname}: {ipaddr}/{cidr}",
+          "tooltip-format": "{essid}",
+          "on-click-right": "nm-connection-editor"
+	},
+
+	"tray": {
+		"icon-size": 16,
+		"spacing": 5
+	},
+
+	"backlight": {
+        // "device": "acpi_video1",
+	"format": "{icon} {percent}%",
+        "format-icons": ["", "", "", "", "", "", "", "", ""],
+//	"on-scroll-up":,
+//	"on-scroll-down":,
+	},
+
+	"pulseaudio": {
+		"format": "{icon} {volume}%",
+        	"format-muted": "󰝟",
+		"format-icons": {
+			"default": ["󰕿", "󰖀", "󰕾"]
+		},
+		"on-click": "bash ~/.scripts/volume mute",
+    "on-scroll-up": "bash ~/.scripts/volume up",
+    "on-scroll-down": "bash ~/.scripts/volume down",
+    "scroll-step": 5,
+		"on-click-right": "pavucontrol"
+  },
+  "custom/randwall": {
+    "format": " 󰏘 ",
+    "on-click": "bash $HOME/wall.sh ~/wallpapers",
+    "on-click-right": "bash $HOME/wall.sh ~/wallpapers/"
+  },
+  "custom/launcher": {
+    "format": " 󰈸 ",
+    "on-click": "wofi --allow-images --show drun",
+//    "on-click": "wofi --show drun -I -a -n -W 500 -H 376 -s ~/.config/wofi/themes/gruvbox.css",
+    "on-click-right": ""  
+//    "on-click-right": "wofi --show run -I -a -n -W 500 -H 376 -s ~/.config/wofi/themes/gruvbox.css"  
+  },
+  "custom/upload": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format": "↕{bandwidthTotalBytes}",
+        "format-disconnected": "{icon} No Internet",
+        "format-linked": " {ifname} (No IP)",
+        "format-alt": "↕{bandwidthUpBytes} | ↕{bandwidthDownBytes}",
+        "tooltip-format": "{ifname}: {ipaddr}/{cidr}  {gwaddr}",
+        "tooltip-format-wifi": "{icon} {essid} ({signalStrength}%)",
+        "tooltip-format-ethernet": "{icon} {ipaddr}/{cidr}",
+        "tooltip-format-disconnected": "{icon} Disconnected",
+        "on-click-right": "nm-connection-editor",
+        "format-icons": {
+            "ethernet": "",
+            "disconnected": "⚠",
+            "wifi": [
+                "睊",
+                "直"
+            ]
+        },
+        "interval": 2
+    },
+  "custom/wf-recorder": {
+		"format": "{}",
+		"interval": "once",
+		"exec": "echo ''",
+		"tooltip": "false",
+		"exec-if": "pgrep 'wf-recorder'",
+		"on-click": "exec ./scripts/wlrecord.sh",
+		"signal": 8
+	},
+
+  "custom/hyprpicker": {
+    "format": "󰈋",
+    "on-click": "hyprpicker -a -f hex",
+    "on-click-right": "hyprpicker -a -f rgb"
+  },
+  }
+}
